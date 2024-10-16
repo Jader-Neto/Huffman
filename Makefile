@@ -1,5 +1,8 @@
 make:
-	gcc list.c -o list
+	gcc src/main.c src/list.c -Iinc -o build/Ezip.exe
 
 run:
-	./list
+	./build/Ezip.exe
+
+clean:
+	rm -rf build

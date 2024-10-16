@@ -6,12 +6,18 @@ node_t* criar_List() { //função que cria a lista encadeada, com um único nó
     return NULL; //retorna NULL para indicar que a lista está vazia inicialmente
 }
 
+void *ponteiroparaVoid(unsigned char byte) {
+    unsigned char *ponteiro = malloc(sizeof(unsigned char));
+    *ponteiro = byte;
+    return (void*) ponteiro;
+}
+
 // função para inserir os nós ordenados na lista encadeada, de acordo com a frequência
 void inserir_ord(node_t **head, int freq, char byte) { //recebe a cabeça da lista encadeada, a frequência que aparece o caractere e o caractere
     
     node_t *novo = (node_t*) malloc(sizeof(node_t)); //cria um ponteiro do tipo nó e aloca dinamicamente na memória o espaço de um nó;
     novo->freq = freq; //atualiza a variável freq do nó nomeado novo, com o valor recebido na entrada da função de inserir
-    novo->byte = byte; //atualiza a variável byte com o caractere recebido na entrada da função
+    novo->byte = *((char*)ponteiroparaVoid(byte)); //atualiza a variável byte com o caractere recebido na entrada da função
     novo->filhoE = NULL; //filho 1 aponta para NULL
     novo->filhoD = NULL; //filho 2 aponta para NULL
 
@@ -77,7 +83,7 @@ node_t* listFreq(FILE *arq) { //recebe o nome do arquivo como argumento
             inserir_ord(&lista, frequencias[i], i); //insere o caractere e sua frequência na lista de forma ordenada
         }
     }
-    exib_List(lista);
+    //exib_List(lista);
 
     return lista; //retorna a cabeça da lista encadeada contendo os caracteres e suas frequências
 }
