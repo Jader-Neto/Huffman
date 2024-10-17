@@ -1,6 +1,5 @@
 #include "list.h"
 
-
 node_t* criar_List() { //função que cria a lista encadeada, com um único nó
 
     return NULL; //retorna NULL para indicar que a lista está vazia inicialmente
@@ -12,8 +11,22 @@ void *ponteiroparaVoid(unsigned char byte) {
     return (void*) ponteiro;
 }
 
+node_t *removeCabeca(node_t **head, int *tamLista){
+
+    node_t *atual = NULL;
+    if(*head != NULL){
+
+        atual = *head;
+        *head = (*head)->prox;
+        atual -> prox =NULL; 
+        (*tamLista)--;
+    }
+    return atual;
+
+}
+
 // função para inserir os nós ordenados na lista encadeada, de acordo com a frequência
-void inserir_ord(node_t **head, int freq, char byte) { //recebe a cabeça da lista encadeada, a frequência que aparece o caractere e o caractere
+node_t *inserir_ord(node_t **head, int freq, char byte, int *tamLista) { //recebe a cabeça da lista encadeada, a frequência que aparece o caractere e o caractere
     
     node_t *novo = (node_t*) malloc(sizeof(node_t)); //cria um ponteiro do tipo nó e aloca dinamicamente na memória o espaço de um nó;
     novo->freq = freq; //atualiza a variável freq do nó nomeado novo, com o valor recebido na entrada da função de inserir
@@ -27,7 +40,8 @@ void inserir_ord(node_t **head, int freq, char byte) { //recebe a cabeça da lis
     if (*head == NULL) { //se não houver cabeça da lista
         *head = novo; //apontamos o novo nó como cabeça da lista
         novo->prox = NULL; //o ponteiro prox, do novo nó, aponta agora para nulo. Porque é o único elemento da lista.
-        return; //após isso, sai da função
+        (*tamLista)++;
+        return novo; //após isso, sai da função
     }
 
     while (atual != NULL) {// condição para começarmos a percorrer a lista para inserção do novo nó
@@ -46,11 +60,14 @@ void inserir_ord(node_t **head, int freq, char byte) { //recebe a cabeça da lis
             }
 
             novo->prox = atual; //pronto. Inserimos o novo nó, ordenado! O ponteiro próximo do novo nó agora aponta para o nó atual.
-            return; //encerra o if, e volta ao inicio do looping.
+            (*tamLista)++;
+            return novo; //encerra o if, e volta ao inicio do looping.
         }
     }
     anter->prox = novo; //se todos os nós da lista forem maiores que o que queremos inserir(?), inserimos ele no final
     novo->prox = NULL; //o ponteiro próximo do novo nó aponta para NULL
+    (*tamLista)++;
+    return novo;
 }
 
 void exib_List(node_t* head) { //função de printar a lista encadeada. Tem como argumento a cabeça da lista.
@@ -63,7 +80,7 @@ void exib_List(node_t* head) { //função de printar a lista encadeada. Tem como
 }
 
 // função para inserir os nós ordenados na lista encadeada, de acordo com a frequência
-node_t* listFreq(FILE *arq) { //recebe o nome do arquivo como argumento
+node_t* listFreq(FILE *arq, int *tamLista) { //recebe o nome do arquivo como argumento
 
     // Tabela de frequências: cada índice representa um caractere (0 a 255 do ASCII)
     char frequencias[256] = {0}; //inicializa a tabela de frequências com zeros
@@ -80,10 +97,9 @@ node_t* listFreq(FILE *arq) { //recebe o nome do arquivo como argumento
     // Criação da lista com base nas frequências
     for (int i = 0; i < 256; i++) { //percorre todos os caracteres possíveis
         if (frequencias[i] > 0) { //se o caractere apareceu no arquivo
-            inserir_ord(&lista, frequencias[i], i); //insere o caractere e sua frequência na lista de forma ordenada
+            inserir_ord(&lista, frequencias[i], i, tamLista); //insere o caractere e sua frequência na lista de forma ordenada
         }
     }
-    //exib_List(lista);
 
     return lista; //retorna a cabeça da lista encadeada contendo os caracteres e suas frequências
 }

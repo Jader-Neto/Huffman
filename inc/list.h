@@ -17,8 +17,9 @@ typedef struct node {
 // Funções que serão implementadas no arquivo .c
 node_t* criar_List();
 void *ponteiroparaVoid(unsigned char byte);
-void inserir_ord(node_t **head, int freq, char byte);
+node_t *removeCabeca(node_t **head, int *tamLista);
+node_t *inserir_ord(node_t **head, int freq, char byte, int *tamLista);
 void exib_List(node_t* head);
-node_t* listFreq(FILE *arq);
+node_t* listFreq(FILE *arq, int *tamLista);
 
 #endif // LIST_H
